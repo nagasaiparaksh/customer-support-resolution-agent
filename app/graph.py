@@ -13,6 +13,7 @@
 State is a dict every node reads and updates. Each node returns only the keys it changes;
 `trace` uses an `add` reducer so entries accumulate instead of overwriting.
 """
+import asyncio
 import operator
 import time
 from typing import Annotated, TypedDict
@@ -74,7 +75,8 @@ async def load_customer(state: State):
 
 @traced("classify")
 async def classify(state: State):
-    fields, source = llm.classify(state["message"], state.get("context", ""), state["orders"])
+    # blocking HTTP call to the model: run it in a thread so the server stays responsive
+    fields, source = await asyncio.to_thread(llm.classify, state["message"], state.get("context", ""), state["orders"])
     return {"intent": fields["intent"], "category": fields["category"], "severity": fields["severity"],
             "mentioned_order_id": fields["order_id"], "summary": fields["summary"], "classified_by": source,
             "_summary": f"{fields['intent']} / {fields['category']} / severity {fields['severity']} (via {source})"}
@@ -158,7 +160,7 @@ async def respond(state: State):
         facts = ({"kind": "clarify", "orders": state["orders"]} if state["intent"] == "complaint"
                  else {"kind": "other"})
     facts = {**facts, "first_name": (state.get("customer") or {}).get("name", "").split(" ")[0] or "there"}
-    reply, source = llm.write_reply(facts)
+    reply, source = await asyncio.to_thread(llm.write_reply, facts)
     return {"facts": facts, "reply": reply, "_summary": f"{facts['kind']} reply (via {source})"}
 
 

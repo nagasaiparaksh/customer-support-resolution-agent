@@ -13,8 +13,18 @@ uvicorn app.main:app --reload   # open http://localhost:8000
 python -m pytest -q             # 13 tests, offline
 ```
 
-Optional: set `ANTHROPIC_API_KEY` (see `.env.example`) so Claude classifies messages and phrases
-replies. Without it the agent runs offline with keyword rules and templates; decisions are identical.
+## Which model understands messages
+
+| Setup | How |
+|---|---|
+| Local Qwen (default if found) | Install Ollama, run `ollama pull qwen2.5:7b`. The app detects it on startup and prefers any `qwen` model. |
+| Claude | Set `ANTHROPIC_API_KEY` |
+| Hosted Qwen or any OpenAI-compatible API | `LLM_PROVIDER=openai`, `LLM_BASE_URL`, `LLM_API_KEY`, `LLM_MODEL` |
+| None | Keyword rules only (`LLM_PROVIDER=none`, or nothing available) |
+
+The model only turns text into fields (and optionally phrases replies with `LLM_REPLIES=1`).
+Refund decisions are always made by `app/policy.py`. The top-right of the page shows which model is active.
+On a CPU, a 7B model takes roughly 8 s per message once warm (about 30 s on the first call).
 
 ## Map
 

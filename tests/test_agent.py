@@ -12,7 +12,7 @@ from app.seed import seed_if_empty
 @pytest.fixture(autouse=True)
 def fresh_db(tmp_path, monkeypatch):
     monkeypatch.setattr(settings, "db_path", str(tmp_path / "t.db"))
-    monkeypatch.setattr(settings, "anthropic_api_key", "")
+    monkeypatch.setattr(settings, "llm_provider", "none")     # tests never call a model
     mock_api._seen.clear()          # the fake external service remembers keys between tests otherwise
     db.init_db()
     seed_if_empty()
@@ -83,6 +83,11 @@ def test_order_status_question_creates_no_ticket():
 def test_legal_threat_escalates_even_without_an_order():
     r = run("C-1002", "I will call my lawyer about this")
     assert r["facts"]["kind"] == "escalated"
+
+
+def test_vague_condition_wording_is_a_damage_complaint():
+    r = run("C-1001", "My order is not in a good condition", )
+    assert r["category"] == "damaged"
 
 
 def test_unknown_customer():

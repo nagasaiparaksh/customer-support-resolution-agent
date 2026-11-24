@@ -40,12 +40,8 @@ class ResolveIn(BaseModel):
 
 @app.get("/api/status")
 def status():
-    return {"llm": "claude" if llm.enabled() else "offline rules", "model": llm_model()}
-
-
-def llm_model():
-    from .config import settings
-    return settings.model if llm.enabled() else None
+    b = llm.backend()
+    return {"llm": b.label if b else "offline rules", "model": b.model if b else None}
 
 
 @app.get("/api/customers")
