@@ -1,0 +1,6 @@
+.vibe-wise/
+__pycache__/
+*.db
+.env
+.pytest_cache/
+.venv/

@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Resolution Desk</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <span class="mark" aria-hidden="true"></span>
+      <h1>Resolution <em>Desk</em></h1>
+    </div>
+    <nav class="tabs" role="tablist">
+      <button role="tab" id="tab-customer" aria-selected="true" data-view="customer">Customer</button>
+      <button role="tab" id="tab-desk" aria-selected="false" data-view="desk">Staff desk <span id="queue-count" class="count" hidden></span></button>
+    </nav>
+    <div class="engine" id="engine" title="How the agent understands messages">…</div>
+  </header>
+
+  <!-- ============ Customer view ============ -->
+  <main id="view-customer" class="view customer">
+    <section class="conversation">
+      <div class="who">
+        <label for="customer-select">Writing in as</label>
+        <select id="customer-select"></select>
+        <button id="new-convo" class="ghost" type="button">New conversation</button>
+      </div>
+      <div id="orders" class="orders" aria-label="Orders for this customer"></div>
+
+      <ol id="transcript" class="transcript" aria-live="polite"></ol>
+
+      <div id="prompts" class="prompts" aria-label="Example messages"></div>
+      <form id="composer" class="composer">
+        <textarea id="input" rows="2" maxlength="1000" placeholder="Describe what went wrong…" aria-label="Your message"></textarea>
+        <button type="submit" id="send">Send</button>
+      </form>
+    </section>
+
+    <aside class="workings" aria-label="Agent workings">
+      <h2>Under the hood</h2>
+      <p class="hint">Every message runs through this graph. Lit steps ran for your last message.</p>
+      <div id="graph" class="graph"></div>
+      <h3>Trace</h3>
+      <ol id="trace" class="trace"><li class="empty">Send a message to watch the agent work.</li></ol>
+      <div id="ticket-card" class="ticket-card" hidden></div>
+    </aside>
+  </main>
+
+  <!-- ============ Staff desk view ============ -->
+  <main id="view-desk" class="view desk" hidden>
+    <section class="queue">
+      <div class="queue-head">
+        <h2>Tickets</h2>
+        <div class="filters" id="filters">
+          <button data-status="" aria-pressed="true">All</button>
+          <button data-status="escalated" aria-pressed="false">Needs a person</button>
+          <button data-status="resolved" aria-pressed="false">Resolved</button>
+        </div>
+      </div>
+      <ul id="ticket-list" class="ticket-list"></ul>
+    </section>
+    <section id="ticket-detail" class="detail">
+      <p class="empty big">Select a ticket to read the case file.</p>
+    </section>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
