@@ -1,6 +1,6 @@
 # Customer Support Resolution Agent
 
-A LangGraph agent behind FastAPI that registers complaints, looks up customer data, calls an
+A LangGraph agent behind FastAPI that registers complaints, looks up customer data,helps customers with their queries, calls an
 external API, and hands anything risky to a human. Two UIs: a customer chat and a staff desk.
 
 ## Run
