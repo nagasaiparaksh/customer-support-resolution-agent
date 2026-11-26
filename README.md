@@ -7,10 +7,10 @@ external API, and hands anything risky to a human. Two UIs: a customer chat and 
 
 ```
 python -m venv .venv
-.venv\Scripts\activate          # macOS/Linux: source .venv/bin/activate
+.venv\Scripts\activate          
 pip install -r requirements.txt
 uvicorn app.main:app --reload   # open http://localhost:8000
-python -m pytest -q             # 13 tests, offline
+python -m pytest -q             # for the offline 13 tests
 ```
 
 ## Which model understands messages
